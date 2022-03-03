@@ -1,0 +1,45 @@
+.container {
+  padding: 64px;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 48px;
+  padding: 16px;
+}
+
+.primaryBtn {
+  background: linear-gradient(94.75deg, #f39721 0%, #eb1422 100%);
+  padding: 16px 32px;
+  border: none;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.main {
+  display: flex;
+}
+.certificateWrapper {
+  width: 60%;
+  padding: 16px;
+}
+.editsWrapper {
+  width: 40%;
+  padding: 16px;
+}
+.card {
+  background: #1f1f1f;
+  border: 2px solid #2b2b2b;
+  padding: 16px;
+  margin-bottom: 32px;
+}
+.sticky {
+  position: sticky;
+  top: 32px;
+}
+.title {
+  color: white;
+  margin: 0;
+}
