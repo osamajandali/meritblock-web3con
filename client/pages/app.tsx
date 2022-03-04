@@ -1,14 +1,62 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import Web3 from 'web3'
+
 
 // Components
 import Certificate from "../components/certificate";
 
 // Styles
 import styles from "../styles/pages/App.module.css";
+import { POLYGON_NETWORK_TEST_ID } from "../utils/constants";
 
 const App: NextPage = () => {
+  const givenProvider = Web3.givenProvider;
+  const [accounts, setAccounts] = useState<string[]>([]);
+
+  useEffect(() => {
+    const refetchAccounts = (web3: Web3) => {
+      web3.eth.getAccounts().then(setAccounts);
+    }
+
+    if (givenProvider) {
+      const web3 = new Web3(givenProvider);
+
+      refetchAccounts(web3);
+
+      const updateInterval = setInterval(() => refetchAccounts(web3), 1000);
+      return () => {
+        clearInterval(updateInterval);
+      };
+    }
+  }, [givenProvider]);
+
+  const connect = async () => {
+    if (!givenProvider) {
+      // TODO show popup with instructions
+      console.error('No Metamask plugin')
+      return;
+    }
+    const web3 = new Web3(Web3.givenProvider);
+    const networkId = await web3.eth.net.getId();
+
+    if (networkId !== POLYGON_NETWORK_TEST_ID) {
+      // TODO show popup with ability to switch network
+      console.error('Wrong network')
+      return;
+    }
+    Web3.givenProvider.send('eth_requestAccounts')
+  }
+
+  const mint = async () => {
+    // TODO generate metadata object
+    // TODO upload cert and metadata to IPFS
+    const metadataUri = 'https://raw.githubusercontent.com/beaver-codes/BeaverNFT/master/assets/beaverNFT_0.json';
+    // TODO mint
+
+  }
   return (
     <div className={styles.container}>
       <Head>
@@ -27,7 +75,10 @@ const App: NextPage = () => {
           />
         </span>
         <span>
-          <button className={styles.primaryBtn}>Connect Wallet</button>
+          {!!accounts.length
+            ? <div className={styles.primaryBtn}>{accounts[0]}</div>
+            : <button className={styles.primaryBtn} onClick={connect}>Connect Wallet</button>
+          }
         </span>
       </header>
       <main className={styles.main}>
@@ -47,6 +98,7 @@ const App: NextPage = () => {
           <div className={styles.card}>
             <h1 className={styles.title}>Customize Template</h1>
           </div>
+          <button className={styles.primaryBtn} onClick={mint}>Mint</button>
         </div>
       </main>
 

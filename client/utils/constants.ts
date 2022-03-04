@@ -1,0 +1,1 @@
+export const POLYGON_NETWORK_TEST_ID = 80001;
