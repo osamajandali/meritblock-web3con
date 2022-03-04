@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import { useState } from "react";
 
 // Components
 import Certificate from "../components/certificate";
@@ -9,7 +10,21 @@ import Students from "../components/students";
 // Styles
 import styles from "../styles/pages/App.module.css";
 
+type StudentData = {
+  id: string;
+  name: string;
+  address: string;
+  date: string;
+};
+
 const App: NextPage = () => {
+  const [preview, setPreview] = useState<StudentData>({
+    id: "",
+    name: "STUDENT NAME ",
+    address: "",
+    date: "DATE ",
+  });
+
   return (
     <div className={styles.container}>
       <Head>
@@ -35,15 +50,15 @@ const App: NextPage = () => {
         <div className={styles.certificateWrapper}>
           <div className={`${styles.card} ${styles.sticky}`}>
             <Certificate
-              name="Osama Jandali"
+              name={preview.name}
               courseName="web3Con"
-              date="3/3/2022"
+              date={preview.date}
             />
           </div>
         </div>
         <div className={styles.editsWrapper}>
           <div className={styles.card}>
-            <Students />
+            <Students setPreview={setPreview} />
           </div>
           <div className={styles.card}>
             <h4 className="main-title">Customize Template</h4>
