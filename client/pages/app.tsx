@@ -74,25 +74,6 @@ const App: NextPage = () => {
     Web3.givenProvider.send("eth_requestAccounts");
   };
 
-  useEffect(() => {
-    if (certificateUri) {
-      const upload = async () => {
-        const nftstorage = new NFTStorage({ token: NFT_STORAGE_API_KEY });
-
-        const result = await fetch(certificateUri);
-        const blob = await result.blob();
-
-        const ipfsURL = await nftstorage.store({
-          name: "test",
-          description: "test2",
-          image: blob,
-        });
-      };
-
-      upload();
-    }
-  }, [certificateUri]);
-
   const mint = async () => {
     const nftstorage = new NFTStorage({ token: NFT_STORAGE_API_KEY });
 
@@ -100,16 +81,21 @@ const App: NextPage = () => {
     const blob = await result.blob();
 
     const uploadResult = await nftstorage.store({
-      name: "test",
-      description: "test2",
+      name: courseName,
+      description: `MeritBlock - ${courseName}`,
       image: blob,
+      properties: {
+        courseName,
+        name: preview.name,
+        date: preview.date,
+      }
     });
 
     console.log("Cert is uploaded!", uploadResult.url);
 
     const metadataUri = uploadResult.url + "";
 
-    const recieverAddress = accounts[0]; // TODO replace with students address
+    const recieverAddress = preview.address
     const web3 = new Web3(Web3.givenProvider);
     const contract = new web3.eth.Contract(abi, NFT_ADDRESS);
 

@@ -46,10 +46,11 @@ contract MeritBlockNFT is ERC721Enumerable, Ownable {
     ///////////////////////////////////////
 
     function _beforeTokenTransfer(
-        address,
-        address,
-        uint256
-    ) internal view override {
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal override {
+        super._beforeTokenTransfer(from, to, tokenId);
         require(_transferEnabledForMint, "MeritBlockNFT is not transferable");
     }
 
