@@ -1,7 +1,14 @@
 .inputsWrapper {
-  background-color: tomato;
+  background-color: #292929;
   padding: 16px;
 }
 .inputWrapper {
   margin-bottom: 8px;
+}
+.buttonsWrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+.buttonsWrapper button {
+  margin-left: 8px;
 }

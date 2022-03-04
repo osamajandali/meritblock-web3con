@@ -99,7 +99,7 @@ export default function Certificate({ name, courseName, date }: Props) {
             letterSpacing="0em"
           >
             <tspan x="76" y="345">
-              Osama Jandali
+              {name}
             </tspan>
           </text>
           <text
@@ -112,7 +112,7 @@ export default function Certificate({ name, courseName, date }: Props) {
             letterSpacing="0em"
           >
             <tspan x="76" y="388.5">
-              Has successfully completed the ... course
+              Has successfully completed the {courseName} course
             </tspan>
           </text>
           <path
@@ -306,7 +306,7 @@ export default function Certificate({ name, courseName, date }: Props) {
             letterSpacing="0em"
           >
             <tspan x="32" y="560">
-              3/3/2022
+              {date}
             </tspan>
           </text>
           <image
