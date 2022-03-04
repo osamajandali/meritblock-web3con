@@ -18,3 +18,11 @@ a {
   box-sizing: border-box;
   font-family: "Josefin Sans", sans-serif;
 }
+ul,
+ol {
+  margin: 0;
+}
+.main-title {
+  color: white;
+  margin: 0;
+}
