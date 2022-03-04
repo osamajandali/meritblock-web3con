@@ -10,7 +10,8 @@ import Certificate from "../components/certificate";
 
 // Styles
 import styles from "../styles/pages/App.module.css";
-import { POLYGON_NETWORK_TEST_ID } from "../utils/constants";
+import { NFT_ADDRESS, POLYGON_NETWORK_TEST_ID } from "../utils/constants";
+import abi from "../utils/meritBlockABI";
 
 const App: NextPage = () => {
   const givenProvider = Web3.givenProvider;
@@ -54,9 +55,19 @@ const App: NextPage = () => {
     // TODO generate metadata object
     // TODO upload cert and metadata to IPFS
     const metadataUri = 'https://raw.githubusercontent.com/beaver-codes/BeaverNFT/master/assets/beaverNFT_0.json';
-    // TODO mint
+    const recieverAddress = accounts[0]; // TODO replace with students address
 
+    const web3 = new Web3(Web3.givenProvider);
+    const contract = new web3.eth.Contract(abi, NFT_ADDRESS);
+
+    try {
+      await contract.methods.mint(recieverAddress, metadataUri).send({ from: accounts[0] });
+      console.log('Cert is minted!');
+    } catch (e) {
+      console.error('Something went bad');
+    }
   }
+
   return (
     <div className={styles.container}>
       <Head>

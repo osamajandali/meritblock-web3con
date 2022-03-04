@@ -1,1 +1,2 @@
 export const POLYGON_NETWORK_TEST_ID = 80001;
+export const NFT_ADDRESS = '0xdc8ac93e8737fa2c80757895cfc35f83e66d1042';
