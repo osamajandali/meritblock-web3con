@@ -3,19 +3,20 @@ import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Web3 from "web3";
+import { NFTStorage } from 'nft.storage'
 
 // Components
 import Certificate from "../components/certificate";
 
 // Styles
 import styles from "../styles/pages/App.module.css";
-import { NFT_ADDRESS, POLYGON_NETWORK_TEST_ID } from "../utils/constants";
+import { NFT_ADDRESS, NFT_STORAGE_API_KEY, POLYGON_NETWORK_TEST_ID } from "../utils/constants";
 import abi from "../utils/meritBlockABI";
 
 const App: NextPage = () => {
   const givenProvider = Web3.givenProvider;
   const [accounts, setAccounts] = useState<string[]>([]);
-  const [certificateUri, setCertificateUri] = useState<string[]>([]);
+  const [certificateUri, setCertificateUri] = useState<string>('');
 
   useEffect(() => {
     const refetchAccounts = (web3: Web3) => {
@@ -51,13 +52,43 @@ const App: NextPage = () => {
     Web3.givenProvider.send("eth_requestAccounts");
   };
 
-  const mint = async () => {
-    // TODO generate metadata object
-    // TODO upload cert and metadata to IPFS
-    const metadataUri =
-      "https://raw.githubusercontent.com/beaver-codes/BeaverNFT/master/assets/beaverNFT_0.json";
-    const recieverAddress = accounts[0]; // TODO replace with students address
+  useEffect(() => {
+    if (certificateUri) {
+      const upload = async () => {
+        const nftstorage = new NFTStorage({ token: NFT_STORAGE_API_KEY })
 
+        const result = await fetch(certificateUri)
+        const blob = await result.blob();
+
+        const ipfsURL = await nftstorage.store({
+          name: 'test',
+          description: 'test2',
+          image: blob,
+        })
+      }
+
+      upload();
+    }
+  }, [certificateUri])
+
+  const mint = async () => {
+    const nftstorage = new NFTStorage({ token: NFT_STORAGE_API_KEY })
+
+    const result = await fetch(certificateUri)
+    const blob = await result.blob();
+
+    const uploadResult = await nftstorage.store({
+      name: 'test',
+      description: 'test2',
+      image: blob,
+    })
+
+    console.log("Cert is uploaded!", uploadResult.url);
+
+    const metadataUri = uploadResult.url + '';
+
+
+    const recieverAddress = accounts[0]; // TODO replace with students address
     const web3 = new Web3(Web3.givenProvider);
     const contract = new web3.eth.Contract(abi, NFT_ADDRESS);
 
