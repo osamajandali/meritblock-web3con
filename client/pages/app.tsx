@@ -50,8 +50,13 @@ const App: NextPage = () => {
     Web3.givenProvider.send('eth_requestAccounts')
   }
 
-  const hasAccount = !!accounts.length
+  const mint = async () => {
+    // TODO generate metadata object
+    // TODO upload cert and metadata to IPFS
+    const metadataUri = 'https://raw.githubusercontent.com/beaver-codes/BeaverNFT/master/assets/beaverNFT_0.json';
+    // TODO mint
 
+  }
   return (
     <div className={styles.container}>
       <Head>
@@ -93,6 +98,7 @@ const App: NextPage = () => {
           <div className={styles.card}>
             <h1 className={styles.title}>Customize Template</h1>
           </div>
+          <button className={styles.primaryBtn} onClick={mint}>Mint</button>
         </div>
       </main>
 
