@@ -4,6 +4,7 @@ import Image from "next/image";
 
 // Components
 import Certificate from "../components/certificate";
+import Students from "../components/students";
 
 // Styles
 import styles from "../styles/pages/App.module.css";
@@ -42,10 +43,10 @@ const App: NextPage = () => {
         </div>
         <div className={styles.editsWrapper}>
           <div className={styles.card}>
-            <h1 className={styles.title}>Students Data</h1>
+            <Students />
           </div>
           <div className={styles.card}>
-            <h1 className={styles.title}>Customize Template</h1>
+            <h4 className="main-title">Customize Template</h4>
           </div>
         </div>
       </main>
