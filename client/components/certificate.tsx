@@ -1,4 +1,6 @@
-import React from "react";
+import { useEffect, useRef } from "react";
+
+const { svgAsPngUri } = require("save-svg-as-png");
 
 // Styles
 import styles from "../styles/components/Certificate.module.css";
@@ -7,12 +9,26 @@ type Props = {
   name: string;
   courseName: string;
   date: string;
+  setCertificateUri: Function;
 };
 
-export default function Certificate({ name, courseName, date }: Props) {
+export default function Certificate({
+  name,
+  courseName,
+  date,
+  setCertificateUri,
+}: Props) {
+  const certificateEl = useRef(null);
+  useEffect(() => {
+    svgAsPngUri(certificateEl.current).then((uri: string) => {
+      setCertificateUri(uri);
+    });
+    console.log("test");
+  }, [setCertificateUri]);
   return (
     <div className={styles.wrapper}>
       <svg
+        ref={certificateEl}
         className={styles.certificate}
         viewBox="0 0 842 595"
         fill="none"

@@ -2,8 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import Web3 from 'web3'
-
+import Web3 from "web3";
 
 // Components
 import Certificate from "../components/certificate";
@@ -16,11 +15,12 @@ import abi from "../utils/meritBlockABI";
 const App: NextPage = () => {
   const givenProvider = Web3.givenProvider;
   const [accounts, setAccounts] = useState<string[]>([]);
+  const [certificateUri, setCertificateUri] = useState<string[]>([]);
 
   useEffect(() => {
     const refetchAccounts = (web3: Web3) => {
       web3.eth.getAccounts().then(setAccounts);
-    }
+    };
 
     if (givenProvider) {
       const web3 = new Web3(givenProvider);
@@ -37,7 +37,7 @@ const App: NextPage = () => {
   const connect = async () => {
     if (!givenProvider) {
       // TODO show popup with instructions
-      console.error('No Metamask plugin')
+      console.error("No Metamask plugin");
       return;
     }
     const web3 = new Web3(Web3.givenProvider);
@@ -45,29 +45,31 @@ const App: NextPage = () => {
 
     if (networkId !== POLYGON_NETWORK_TEST_ID) {
       // TODO show popup with ability to switch network
-      console.error('Wrong network')
+      console.error("Wrong network");
       return;
     }
-    Web3.givenProvider.send('eth_requestAccounts')
-  }
+    Web3.givenProvider.send("eth_requestAccounts");
+  };
 
   const mint = async () => {
     // TODO generate metadata object
     // TODO upload cert and metadata to IPFS
-    const metadataUri = 'https://raw.githubusercontent.com/beaver-codes/BeaverNFT/master/assets/beaverNFT_0.json';
+    const metadataUri =
+      "https://raw.githubusercontent.com/beaver-codes/BeaverNFT/master/assets/beaverNFT_0.json";
     const recieverAddress = accounts[0]; // TODO replace with students address
 
     const web3 = new Web3(Web3.givenProvider);
     const contract = new web3.eth.Contract(abi, NFT_ADDRESS);
 
     try {
-      await contract.methods.mint(recieverAddress, metadataUri).send({ from: accounts[0] });
-      console.log('Cert is minted!');
+      await contract.methods
+        .mint(recieverAddress, metadataUri)
+        .send({ from: accounts[0] });
+      console.log("Cert is minted!");
     } catch (e) {
-      console.error('Something went bad');
+      console.error("Something went bad");
     }
-  }
-
+  };
   return (
     <div className={styles.container}>
       <Head>
@@ -86,10 +88,13 @@ const App: NextPage = () => {
           />
         </span>
         <span>
-          {!!accounts.length
-            ? <div className={styles.primaryBtn}>{accounts[0]}</div>
-            : <button className={styles.primaryBtn} onClick={connect}>Connect Wallet</button>
-          }
+          {!!accounts.length ? (
+            <div className={styles.primaryBtn}>{accounts[0]}</div>
+          ) : (
+            <button className={styles.primaryBtn} onClick={connect}>
+              Connect Wallet
+            </button>
+          )}
         </span>
       </header>
       <main className={styles.main}>
@@ -99,6 +104,7 @@ const App: NextPage = () => {
               name="Osama Jandali"
               courseName="web3Con"
               date="3/3/2022"
+              setCertificateUri={setCertificateUri}
             />
           </div>
         </div>
@@ -109,7 +115,9 @@ const App: NextPage = () => {
           <div className={styles.card}>
             <h1 className={styles.title}>Customize Template</h1>
           </div>
-          <button className={styles.primaryBtn} onClick={mint}>Mint</button>
+          <button className={styles.primaryBtn} onClick={mint}>
+            Mint
+          </button>
         </div>
       </main>
 
