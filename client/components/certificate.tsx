@@ -10,6 +10,7 @@ type Props = {
   courseName: string;
   date: string;
   setCertificateUri: Function;
+  certificateColor: string;
 };
 
 export default function Certificate({
@@ -17,13 +18,13 @@ export default function Certificate({
   courseName,
   date,
   setCertificateUri,
+  certificateColor,
 }: Props) {
   const certificateEl = useRef(null);
   useEffect(() => {
     svgAsPngUri(certificateEl.current).then((uri: string) => {
       setCertificateUri(uri);
     });
-    console.log("test");
   }, [setCertificateUri]);
   return (
     <div className={styles.wrapper}>
@@ -128,18 +129,19 @@ export default function Certificate({
             letterSpacing="0em"
           >
             <tspan x="76" y="388.5">
-              Has successfully completed the {courseName} course
+              Has successfully completed the {courseName ? courseName : "..."}{" "}
+              course
             </tspan>
           </text>
           <path
             d="M138.914 116.35H-103L-68.1485 63.7218L-65.3677 58.1221L-58.4228 58.0937H91.4428L196.774 -101H282.822L138.914 116.35ZM-61.1331 93.7953H126.929L240.97 -78.4591H208.772L103.441 80.6346H-52.4237L-61.1331 93.7953Z"
-            fill="#EB1422"
+            fill={certificateColor}
           />
-          <path d="M652 54H250" stroke="#EB1422" strokeWidth="5" />
-          <path d="M577 551H175" stroke="#EB1422" strokeWidth="5" />
+          <path d="M652 54H250" stroke={certificateColor} strokeWidth="5" />
+          <path d="M577 551H175" stroke={certificateColor} strokeWidth="5" />
           <path
             d="M730.909 453L972.822 453L937.971 505.629L935.19 511.228L928.245 511.257L778.38 511.257L673.049 670.35L587 670.35L730.909 453ZM930.956 475.555L742.893 475.555L628.853 647.81L661.051 647.81L766.381 488.716L922.246 488.716L930.956 475.555Z"
-            fill="#EB1422"
+            fill={certificateColor}
           />
           <g clipPath="url(#clip1_29_110)">
             <path

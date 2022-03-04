@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Input } from "@nextui-org/react";
-import { Button } from "@nextui-org/react";
+import { Input, Button } from "@nextui-org/react";
 import { Show, Delete } from "react-iconly";
 
 // Styles

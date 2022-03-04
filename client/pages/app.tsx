@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Web3 from "web3";
-import { NFTStorage } from 'nft.storage'
+import { NFTStorage } from "nft.storage";
 
 // Components
 import Certificate from "../components/certificate";
@@ -11,8 +11,13 @@ import Students from "../components/students";
 
 // Styles
 import styles from "../styles/pages/App.module.css";
-import { NFT_ADDRESS, NFT_STORAGE_API_KEY, POLYGON_NETWORK_TEST_ID } from "../utils/constants";
+import {
+  NFT_ADDRESS,
+  NFT_STORAGE_API_KEY,
+  POLYGON_NETWORK_TEST_ID,
+} from "../utils/constants";
 import abi from "../utils/meritBlockABI";
+import Edits from "../components/edits";
 
 type StudentData = {
   id: string;
@@ -31,7 +36,9 @@ const App: NextPage = () => {
 
   const givenProvider = Web3.givenProvider;
   const [accounts, setAccounts] = useState<string[]>([]);
-  const [certificateUri, setCertificateUri] = useState<string>('');
+  const [certificateUri, setCertificateUri] = useState<string>("");
+  const [certificateColor, setCertificateColor] = useState<string>("#eb1422");
+  const [courseName, setCourseName] = useState<string>("");
 
   useEffect(() => {
     const refetchAccounts = (web3: Web3) => {
@@ -70,38 +77,37 @@ const App: NextPage = () => {
   useEffect(() => {
     if (certificateUri) {
       const upload = async () => {
-        const nftstorage = new NFTStorage({ token: NFT_STORAGE_API_KEY })
+        const nftstorage = new NFTStorage({ token: NFT_STORAGE_API_KEY });
 
-        const result = await fetch(certificateUri)
+        const result = await fetch(certificateUri);
         const blob = await result.blob();
 
         const ipfsURL = await nftstorage.store({
-          name: 'test',
-          description: 'test2',
+          name: "test",
+          description: "test2",
           image: blob,
-        })
-      }
+        });
+      };
 
       upload();
     }
-  }, [certificateUri])
+  }, [certificateUri]);
 
   const mint = async () => {
-    const nftstorage = new NFTStorage({ token: NFT_STORAGE_API_KEY })
+    const nftstorage = new NFTStorage({ token: NFT_STORAGE_API_KEY });
 
-    const result = await fetch(certificateUri)
+    const result = await fetch(certificateUri);
     const blob = await result.blob();
 
     const uploadResult = await nftstorage.store({
-      name: 'test',
-      description: 'test2',
+      name: "test",
+      description: "test2",
       image: blob,
-    })
+    });
 
     console.log("Cert is uploaded!", uploadResult.url);
 
-    const metadataUri = uploadResult.url + '';
-
+    const metadataUri = uploadResult.url + "";
 
     const recieverAddress = accounts[0]; // TODO replace with students address
     const web3 = new Web3(Web3.givenProvider);
@@ -148,9 +154,10 @@ const App: NextPage = () => {
           <div className={`${styles.card} ${styles.sticky}`}>
             <Certificate
               name={preview.name}
-              courseName="web3Con"
+              courseName={courseName}
               date={preview.date}
               setCertificateUri={setCertificateUri}
+              certificateColor={certificateColor}
             />
           </div>
         </div>
@@ -159,7 +166,12 @@ const App: NextPage = () => {
             <Students setPreview={setPreview} />
           </div>
           <div className={styles.card}>
-            <h4 className="main-title">Customize Template</h4>
+            <Edits
+              certificateColor={certificateColor}
+              setCertificateColor={setCertificateColor}
+              courseName={courseName}
+              setCourseName={setCourseName}
+            />
           </div>
           <button className={styles.primaryBtn} onClick={mint}>
             Mint
