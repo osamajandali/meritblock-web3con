@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Input, Button } from "@nextui-org/react";
-import { Show, Delete } from "react-iconly";
+import { Input, Button, Loading } from "@nextui-org/react";
+import { Show } from "react-iconly";
 
 // Styles
 import styles from "../styles/components/Students.module.css";
@@ -27,7 +27,9 @@ const InputsRow = ({
   setPreview,
   mint,
 }: InputRowProps) => {
-  function onInputChange(value: string, property: string) {
+  const [isLoading, setIsLoading] = useState(false);
+  function onInputChange(value: string | boolean, property: string) {
+    console.log(value);
     setStudentsData((oldStudentData: StudentData[]) => {
       let prevStudentData: any = [...oldStudentData];
       const index = prevStudentData.findIndex(
@@ -86,12 +88,20 @@ const InputsRow = ({
           <Button
             auto
             color="gradient"
-            onClick={() => {
+            clickable={isLoading ? false : true}
+            onClick={async () => {
+              setIsLoading(true);
               setPreview(student);
-              onInputChange(mint(), "isMinted");
+              const isMinted: boolean = await mint();
+              setIsLoading(false);
+              onInputChange(isMinted, "isMinted");
             }}
           >
-            Mint
+            {isLoading ? (
+              <Loading type="points" color="white" size="sm" />
+            ) : (
+              "Mint"
+            )}
           </Button>
         </div>
       )}
