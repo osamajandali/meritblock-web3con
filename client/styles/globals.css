@@ -5,6 +5,7 @@ body {
 }
 html {
   font-size: 16px;
+  background: #141414;
 }
 body {
   background: #141414;
@@ -16,11 +17,13 @@ a {
 
 * {
   box-sizing: border-box;
-  font-family: "Josefin Sans", sans-serif;
 }
 ul,
 ol {
   margin: 0;
+}
+.container {
+  padding: 64px;
 }
 .main-title {
   color: white;
