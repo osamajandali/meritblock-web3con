@@ -27,7 +27,7 @@ export default function Certificate({
     svgAsPngUri(certificateEl.current).then((uri: string) => {
       setCertificateUri(uri);
     });
-  }, [setCertificateUri]);
+  }, [setCertificateUri, courseName, date, certificateColor, courseLogo]);
   return (
     <div className={styles.wrapper}>
       <svg

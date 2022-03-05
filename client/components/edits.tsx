@@ -24,6 +24,28 @@ type Props = {
   setCourseLogo: Function;
 };
 
+const getBase64 = (file: File) => {
+  return new Promise((resolve) => {
+    let fileInfo;
+    let baseURL: any = "";
+    // Make new FileReader
+    let reader = new FileReader();
+
+    // Convert the file to base64 text
+    reader.readAsDataURL(file);
+
+    // on reader load somthing...
+    reader.onload = () => {
+      // Make a fileInfo Object
+      console.log("Called", reader);
+      baseURL = reader.result;
+      console.log(baseURL);
+      resolve(baseURL);
+    };
+    console.log(fileInfo);
+  });
+};
+
 export default function Edits({
   certificateColor,
   setCertificateColor,
@@ -35,6 +57,20 @@ export default function Edits({
     setCertificateColor(color.hex);
   };
   const [isPickerOpen, setIsPickerOpen] = useState<boolean>(false);
+
+  const handleFileInputChange = (e: any) => {
+    console.log(e.target.files[0]);
+
+    let file = e.target.files[0];
+
+    getBase64(file)
+      .then((result) => {
+        setCourseLogo(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -70,9 +106,7 @@ export default function Edits({
         <input
           aria-label="Course Logo"
           type="file"
-          onChange={(e) =>
-            setCourseLogo(URL.createObjectURL(e.target.files[0]))
-          }
+          onChange={(e) => handleFileInputChange(e)}
         />
       </div>
     </div>

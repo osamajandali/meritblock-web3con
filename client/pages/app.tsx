@@ -81,33 +81,34 @@ const App: NextPage = () => {
     const result = await fetch(certificateUri);
     const blob = await result.blob();
 
-    const uploadResult = await nftstorage.store({
-      name: courseName,
-      description: `MeritBlock - ${courseName}`,
-      image: blob,
-      properties: {
-        courseName,
-        name: preview.name,
-        date: preview.date,
-      },
-    });
+    console.log(certificateUri);
+    // const uploadResult = await nftstorage.store({
+    //   name: courseName,
+    //   description: `MeritBlock - ${courseName}`,
+    //   image: blob,
+    //   properties: {
+    //     courseName,
+    //     name: preview.name,
+    //     date: preview.date,
+    //   },
+    // });
 
-    console.log("Cert is uploaded!", uploadResult.url);
+    // console.log("Cert is uploaded!", uploadResult.url);
 
-    const metadataUri = uploadResult.url + "";
+    // const metadataUri = uploadResult.url + "";
 
-    const recieverAddress = preview.address;
-    const web3 = new Web3(Web3.givenProvider);
-    const contract = new web3.eth.Contract(abi, NFT_ADDRESS);
+    // const recieverAddress = preview.address;
+    // const web3 = new Web3(Web3.givenProvider);
+    // const contract = new web3.eth.Contract(abi, NFT_ADDRESS);
 
-    try {
-      await contract.methods
-        .mint(recieverAddress, metadataUri)
-        .send({ from: accounts[0] });
-      console.log("Cert is minted!");
-    } catch (e) {
-      console.error("Something went bad");
-    }
+    // try {
+    //   await contract.methods
+    //     .mint(recieverAddress, metadataUri)
+    //     .send({ from: accounts[0] });
+    //   console.log("Cert is minted!");
+    // } catch (e) {
+    //   console.error("Something went bad");
+    // }
   };
   return (
     <div className={styles.container}>
