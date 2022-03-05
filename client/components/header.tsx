@@ -13,7 +13,11 @@ export default function Header() {
     <>
       <Head>
         <title>MeritBlock | Toolkit for creating NFT certificates</title>
-        <meta name="description" content="TODO" />
+        <meta
+          name="description"
+          content="Create and customize certificates, mint them into NFT, and send them
+          immediately to your students"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
