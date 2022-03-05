@@ -1,5 +1,6 @@
 .inputsWrapper {
   background-color: #292929;
+  border: 2px solid;
   padding: 16px;
 }
 .inputWrapper {
@@ -11,4 +12,9 @@
 }
 .buttonsWrapper button {
   margin-left: 8px;
+}
+.mintedText {
+  color: #17c964;
+  margin: 0;
+  text-align: right;
 }

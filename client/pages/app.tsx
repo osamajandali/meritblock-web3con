@@ -1,9 +1,11 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Web3 from "web3";
 import { NFTStorage } from "nft.storage";
+
+const { svgAsPngUri } = require("save-svg-as-png");
 
 // Components
 import Certificate from "../components/certificate";
@@ -29,18 +31,17 @@ type StudentData = {
 const App: NextPage = () => {
   const [preview, setPreview] = useState<StudentData>({
     id: "",
-    name: "STUDENT NAME ",
+    name: "",
     address: "",
-    date: "DATE ",
+    date: "",
   });
 
   const givenProvider = Web3.givenProvider;
   const [accounts, setAccounts] = useState<string[]>([]);
-  const [certificateUri, setCertificateUri] = useState<string>("");
   const [certificateColor, setCertificateColor] = useState<string>("#eb1422");
   const [courseName, setCourseName] = useState<string>("");
   const [courseLogo, setCourseLogo] = useState<string>("");
-
+  const certificateEl = useRef(null);
   useEffect(() => {
     const refetchAccounts = (web3: Web3) => {
       web3.eth.getAccounts().then(setAccounts);
@@ -78,37 +79,38 @@ const App: NextPage = () => {
   const mint = async () => {
     const nftstorage = new NFTStorage({ token: NFT_STORAGE_API_KEY });
 
+    const certificateUri = await svgAsPngUri(certificateEl.current);
     const result = await fetch(certificateUri);
     const blob = await result.blob();
+    const uploadResult = await nftstorage.store({
+      name: courseName,
+      description: `MeritBlock - ${courseName}`,
+      image: blob,
+      properties: {
+        courseName,
+        name: preview.name,
+        date: preview.date,
+      },
+    });
 
-    console.log(certificateUri);
-    // const uploadResult = await nftstorage.store({
-    //   name: courseName,
-    //   description: `MeritBlock - ${courseName}`,
-    //   image: blob,
-    //   properties: {
-    //     courseName,
-    //     name: preview.name,
-    //     date: preview.date,
-    //   },
-    // });
+    console.log("Cert is uploaded!", uploadResult.url);
 
-    // console.log("Cert is uploaded!", uploadResult.url);
+    const metadataUri = uploadResult.url + "";
 
-    // const metadataUri = uploadResult.url + "";
+    const recieverAddress = preview.address;
+    const web3 = new Web3(Web3.givenProvider);
+    const contract = new web3.eth.Contract(abi, NFT_ADDRESS);
 
-    // const recieverAddress = preview.address;
-    // const web3 = new Web3(Web3.givenProvider);
-    // const contract = new web3.eth.Contract(abi, NFT_ADDRESS);
-
-    // try {
-    //   await contract.methods
-    //     .mint(recieverAddress, metadataUri)
-    //     .send({ from: accounts[0] });
-    //   console.log("Cert is minted!");
-    // } catch (e) {
-    //   console.error("Something went bad");
-    // }
+    try {
+      await contract.methods
+        .mint(recieverAddress, metadataUri)
+        .send({ from: accounts[0] });
+      console.log("Cert is minted!");
+      return true;
+    } catch (e) {
+      console.error("Something went bad");
+      return false;
+    }
   };
   return (
     <div className={styles.container}>
@@ -145,14 +147,14 @@ const App: NextPage = () => {
               courseName={courseName}
               courseLogo={courseLogo}
               date={preview.date}
-              setCertificateUri={setCertificateUri}
+              certificateEl={certificateEl}
               certificateColor={certificateColor}
             />
           </div>
         </div>
         <div className={styles.editsWrapper}>
           <div className={styles.card}>
-            <Students setPreview={setPreview} />
+            <Students setPreview={setPreview} mint={mint} />
           </div>
           <div className={styles.card}>
             <Edits
@@ -163,9 +165,6 @@ const App: NextPage = () => {
               setCourseLogo={setCourseLogo}
             />
           </div>
-          <button className={styles.primaryBtn} onClick={mint}>
-            Mint
-          </button>
         </div>
       </main>
 

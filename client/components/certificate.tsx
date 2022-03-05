@@ -1,7 +1,3 @@
-import { useEffect, useRef } from "react";
-
-const { svgAsPngUri } = require("save-svg-as-png");
-
 // Styles
 import styles from "../styles/components/Certificate.module.css";
 
@@ -9,7 +5,7 @@ type Props = {
   name: string;
   courseName: string;
   date: string;
-  setCertificateUri: Function;
+  certificateEl: any;
   certificateColor: string;
   courseLogo: string;
 };
@@ -18,16 +14,10 @@ export default function Certificate({
   name,
   courseName,
   date,
-  setCertificateUri,
+  certificateEl,
   certificateColor,
   courseLogo,
 }: Props) {
-  const certificateEl = useRef(null);
-  useEffect(() => {
-    svgAsPngUri(certificateEl.current).then((uri: string) => {
-      setCertificateUri(uri);
-    });
-  }, [setCertificateUri, courseName, date, certificateColor, courseLogo]);
   return (
     <div className={styles.wrapper}>
       <svg
@@ -118,7 +108,7 @@ export default function Certificate({
             letterSpacing="0em"
           >
             <tspan x="76" y="345">
-              {name}
+              {name ? name : "STUDENT NAME"}
             </tspan>
           </text>
           <text
@@ -326,7 +316,7 @@ export default function Certificate({
             letterSpacing="0em"
           >
             <tspan x="32" y="560">
-              {date}
+              {date ? date : "DATE"}
             </tspan>
           </text>
           <image href={courseLogo} height="150" width="150" x="600" y="240" />
