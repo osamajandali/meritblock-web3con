@@ -11,6 +11,7 @@ type Props = {
   date: string;
   setCertificateUri: Function;
   certificateColor: string;
+  courseLogo: string;
 };
 
 export default function Certificate({
@@ -19,6 +20,7 @@ export default function Certificate({
   date,
   setCertificateUri,
   certificateColor,
+  courseLogo,
 }: Props) {
   const certificateEl = useRef(null);
   useEffect(() => {
@@ -327,13 +329,7 @@ export default function Certificate({
               {date}
             </tspan>
           </text>
-          <image
-            href="/web3con-logo.png"
-            height="150"
-            width="150"
-            x="600"
-            y="240"
-          />
+          <image href={courseLogo} height="150" width="150" x="600" y="240" />
         </g>
         <defs>
           <linearGradient

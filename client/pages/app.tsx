@@ -39,6 +39,7 @@ const App: NextPage = () => {
   const [certificateUri, setCertificateUri] = useState<string>("");
   const [certificateColor, setCertificateColor] = useState<string>("#eb1422");
   const [courseName, setCourseName] = useState<string>("");
+  const [courseLogo, setCourseLogo] = useState<string>("");
 
   useEffect(() => {
     const refetchAccounts = (web3: Web3) => {
@@ -88,14 +89,14 @@ const App: NextPage = () => {
         courseName,
         name: preview.name,
         date: preview.date,
-      }
+      },
     });
 
     console.log("Cert is uploaded!", uploadResult.url);
 
     const metadataUri = uploadResult.url + "";
 
-    const recieverAddress = preview.address
+    const recieverAddress = preview.address;
     const web3 = new Web3(Web3.givenProvider);
     const contract = new web3.eth.Contract(abi, NFT_ADDRESS);
 
@@ -141,6 +142,7 @@ const App: NextPage = () => {
             <Certificate
               name={preview.name}
               courseName={courseName}
+              courseLogo={courseLogo}
               date={preview.date}
               setCertificateUri={setCertificateUri}
               certificateColor={certificateColor}
@@ -157,6 +159,7 @@ const App: NextPage = () => {
               setCertificateColor={setCertificateColor}
               courseName={courseName}
               setCourseName={setCourseName}
+              setCourseLogo={setCourseLogo}
             />
           </div>
           <button className={styles.primaryBtn} onClick={mint}>

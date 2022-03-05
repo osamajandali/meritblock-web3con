@@ -1,2 +1,24 @@
-.wrapper {
+.pickerWrapper {
+  margin-bottom: 16px;
+  position: relative;
+}
+.pickerWrapper p {
+  margin-bottom: 4px;
+}
+.pickerWrapper button {
+  padding: 4px;
+  background: #111111;
+  border: none;
+  cursor: pointer;
+}
+.pickerWrapper button span {
+  width: 50px;
+  height: 25px;
+  display: block;
+}
+.picker {
+  position: absolute !important;
+  z-index: 999;
+  top: 30px;
+  right: 100px;
 }
