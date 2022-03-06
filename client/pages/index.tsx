@@ -33,7 +33,7 @@ const Section1 = () => {
       <div>
         <Image
           className={styles.certificate}
-          src="/certificate.svg"
+          src="/certificate-img.svg"
           alt="MeritBlock Logo"
           width={717}
           height={622}
